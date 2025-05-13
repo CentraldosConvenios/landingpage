@@ -1,6 +1,12 @@
 'use client'
 
-import { useState } from 'react'
+declare global {
+  interface Window {
+    fbq: (...args: any[]) => void;
+  }
+}
+
+import { useState, useEffect } from 'react'
 import Image from 'next/image'
 
 export default function FormSectionMobile() {
@@ -11,6 +17,13 @@ export default function FormSectionMobile() {
   const [possuiCNPJ, setPossuiCNPJ] = useState('')
   const [cep, setCep] = useState('')
   const [aceitouPolitica, setAceitouPolitica] = useState(false)
+
+  // Evento ViewContent
+  useEffect(() => {
+    if (typeof window !== 'undefined' && window.fbq) {
+      window.fbq('track', 'ViewContent')
+    }
+  }, [])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -37,6 +50,11 @@ export default function FormSectionMobile() {
       })
 
       if (response.ok) {
+        // Evento Lead
+        if (typeof window !== 'undefined' && window.fbq) {
+          window.fbq('track', 'Lead')
+        }
+
         window.location.href = 'https://wa.me/5511978641111'
       } else {
         alert('Erro ao enviar os dados. Tente novamente.')
@@ -132,3 +150,4 @@ export default function FormSectionMobile() {
     </section>
   )
 }
+
