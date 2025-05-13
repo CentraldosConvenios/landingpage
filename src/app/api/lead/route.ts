@@ -7,6 +7,7 @@ export async function POST(req: Request) {
 
     const { nome, contato, vidas, idades, possuiCNPJ, cep } = body
 
+    // Apenas cria o lead no banco de dados quando a rota for acessada (em tempo de execução)
     const lead = await prisma.lead.create({
       data: {
         nome,
@@ -24,3 +25,4 @@ export async function POST(req: Request) {
     return NextResponse.json({ success: false, error: 'Erro ao salvar lead' }, { status: 500 })
   }
 }
+
