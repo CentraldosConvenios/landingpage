@@ -19,18 +19,6 @@ export async function POST(req: Request) {
       }
     })
 
-    // Envia o evento de conversão para o Facebook Pixel
-    if (typeof window !== 'undefined') {
-      window.fbq('track', 'Lead', {
-        nome,
-        contato,
-        vidas,
-        idades,
-        possuiCNPJ,
-        cep
-      })
-    }
-
     return NextResponse.json({ success: true, lead }, { status: 201 })
   } catch (error) {
     console.error('Erro ao salvar lead:', error)

@@ -1,13 +1,13 @@
 'use client'
 
-declare global {
-  interface Window {
-    fbq: (...args: any[]) => void;
-  }
-}
-
 import { useState, useEffect } from 'react'
 import Image from 'next/image'
+
+declare global {
+  interface Window {
+    fbq: (...args: any[]) => void
+  }
+}
 
 export default function FormSectionMobile() {
   const [nome, setNome] = useState('')
@@ -18,10 +18,29 @@ export default function FormSectionMobile() {
   const [cep, setCep] = useState('')
   const [aceitouPolitica, setAceitouPolitica] = useState(false)
 
-  // Evento ViewContent
+  // Dispara o evento 'ViewContent' quando a seção estiver visível
   useEffect(() => {
-    if (typeof window !== 'undefined' && window.fbq) {
-      window.fbq('track', 'ViewContent')
+    const section = document.getElementById('formulario')
+    if (!section) return
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            if (typeof window !== 'undefined' && window.fbq) {
+              window.fbq('track', 'ViewContent')
+            }
+            observer.unobserve(entry.target) // evita múltiplos disparos
+          }
+        })
+      },
+      { threshold: 0.5 }
+    )
+
+    observer.observe(section)
+
+    return () => {
+      observer.disconnect()
     }
   }, [])
 
@@ -50,7 +69,7 @@ export default function FormSectionMobile() {
       })
 
       if (response.ok) {
-        // Evento Lead
+        // Evento de conversão 'Lead'
         if (typeof window !== 'undefined' && window.fbq) {
           window.fbq('track', 'Lead')
         }
@@ -125,8 +144,7 @@ export default function FormSectionMobile() {
               checked={aceitouPolitica}
               onChange={(e) => setAceitouPolitica(e.target.checked)}
             />
-            Li e concordo com a Política de Privacidade. Autorizo o uso das minhas informações
-            para contato e cotação.
+            Li e concordo com a Política de Privacidade. Autorizo o uso das minhas informações para contato e cotação.
           </label>
 
           <button
@@ -150,4 +168,5 @@ export default function FormSectionMobile() {
     </section>
   )
 }
+
 
