@@ -1,9 +1,15 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Image from 'next/image'
 
-export default function FormSection() {
+declare global {
+  interface Window {
+    fbq: (...args: any[]) => void
+  }
+}
+
+export default function FormSectionMobile() {
   const [nome, setNome] = useState('')
   const [contato, setContato] = useState('')
   const [vidas, setVidas] = useState('')
@@ -11,6 +17,32 @@ export default function FormSection() {
   const [possuiCNPJ, setPossuiCNPJ] = useState('')
   const [cep, setCep] = useState('')
   const [aceitouPolitica, setAceitouPolitica] = useState(false)
+
+  // Dispara o evento 'ViewContent' quando a seção estiver visível
+  useEffect(() => {
+    const section = document.getElementById('formulario')
+    if (!section) return
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            if (typeof window !== 'undefined' && window.fbq) {
+              window.fbq('track', 'ViewContent')
+            }
+            observer.unobserve(entry.target) // evita múltiplos disparos
+          }
+        })
+      },
+      { threshold: 0.5 }
+    )
+
+    observer.observe(section)
+
+    return () => {
+      observer.disconnect()
+    }
+  }, [])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -37,6 +69,11 @@ export default function FormSection() {
       })
 
       if (response.ok) {
+        // Evento de conversão 'Lead'
+        if (typeof window !== 'undefined' && window.fbq) {
+          window.fbq('track', 'Lead')
+        }
+
         window.location.href = 'https://wa.me/5511978641111'
       } else {
         alert('Erro ao enviar os dados. Tente novamente.')
@@ -48,19 +85,15 @@ export default function FormSection() {
   }
 
   return (
-    <section className="mt-[90px] px-[140px] w-full flex justify-between items-start">
-      {/* Bloco 1 - Formulário */}
-      <div
-        id="formulario"
-        className="w-[655px] h-[797px] bg-white rounded-[43px] shadow-lg border border-black px-8 py-10"
-      >
-        <form onSubmit={handleSubmit} className="w-[592px] flex flex-col gap-6">
+    <section className="flex flex-col items-center justify-center px-4 py-8 gap-8">
+      <div id="formulario" className="w-full max-w-[500px] bg-white rounded-[20px] shadow-md border border-black p-6">
+        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           <input
             type="text"
             placeholder="Nome Completo"
             value={nome}
             onChange={(e) => setNome(e.target.value)}
-            className="w-full h-[74px] px-4 rounded-lg border border-gray-300 placeholder:text-black placeholder:font-bold placeholder:text-[18px] font-roboto"
+            className="w-full h-[60px] px-4 rounded-lg border border-gray-300 placeholder:text-black placeholder:font-bold placeholder:text-[16px] font-roboto"
             required
           />
           <input
@@ -68,7 +101,7 @@ export default function FormSection() {
             placeholder="Contato"
             value={contato}
             onChange={(e) => setContato(e.target.value)}
-            className="w-full h-[74px] px-4 rounded-lg border border-gray-300 placeholder:text-black placeholder:font-bold placeholder:text-[18px] font-roboto"
+            className="w-full h-[60px] px-4 rounded-lg border border-gray-300 placeholder:text-black placeholder:font-bold placeholder:text-[16px] font-roboto"
             required
           />
           <input
@@ -76,7 +109,7 @@ export default function FormSection() {
             placeholder="Quantas Vidas?"
             value={vidas}
             onChange={(e) => setVidas(e.target.value)}
-            className="w-full h-[74px] px-4 rounded-lg border border-gray-300 placeholder:text-black placeholder:font-bold placeholder:text-[18px] font-roboto"
+            className="w-full h-[60px] px-4 rounded-lg border border-gray-300 placeholder:text-black placeholder:font-bold placeholder:text-[16px] font-roboto"
             required
           />
           <input
@@ -84,7 +117,7 @@ export default function FormSection() {
             placeholder="Quais as Idades?"
             value={idades}
             onChange={(e) => setIdades(e.target.value)}
-            className="w-full h-[74px] px-4 rounded-lg border border-gray-300 placeholder:text-black placeholder:font-bold placeholder:text-[18px] font-roboto"
+            className="w-full h-[60px] px-4 rounded-lg border border-gray-300 placeholder:text-black placeholder:font-bold placeholder:text-[16px] font-roboto"
             required
           />
           <input
@@ -92,7 +125,7 @@ export default function FormSection() {
             placeholder="Possui CNPJ?"
             value={possuiCNPJ}
             onChange={(e) => setPossuiCNPJ(e.target.value)}
-            className="w-full h-[74px] px-4 rounded-lg border border-gray-300 placeholder:text-black placeholder:font-bold placeholder:text-[18px] font-roboto"
+            className="w-full h-[60px] px-4 rounded-lg border border-gray-300 placeholder:text-black placeholder:font-bold placeholder:text-[16px] font-roboto"
             required
           />
           <input
@@ -100,11 +133,10 @@ export default function FormSection() {
             placeholder="CEP"
             value={cep}
             onChange={(e) => setCep(e.target.value)}
-            className="w-full h-[74px] px-4 rounded-lg border border-gray-300 placeholder:text-black placeholder:font-bold placeholder:text-[18px] font-roboto"
+            className="w-full h-[60px] px-4 rounded-lg border border-gray-300 placeholder:text-black placeholder:font-bold placeholder:text-[16px] font-roboto"
             required
           />
 
-          {/* Checkbox */}
           <label className="flex items-start gap-2 text-[12px] text-black mt-2 font-roboto leading-tight">
             <input
               type="checkbox"
@@ -112,29 +144,25 @@ export default function FormSection() {
               checked={aceitouPolitica}
               onChange={(e) => setAceitouPolitica(e.target.checked)}
             />
-            Li e concordo com a Política de Privacidade. Autorizo o uso das minhas informações
-            para que a equipe entre em contato e encontre o plano de saúde mais adequado ao
-            meu perfil e às minhas necessidades.
+            Li e concordo com a Política de Privacidade. Autorizo o uso das minhas informações para contato e cotação.
           </label>
 
-          {/* Botão */}
           <button
             type="submit"
-            className="h-[74px] bg-[#FBAC0F] text-white text-[38px] font-bold font-roboto rounded-[10px]"
+            className="h-[60px] bg-[#FBAC0F] text-white text-[24px] font-bold font-roboto rounded-[10px]"
           >
             Solicitar Cotação
           </button>
         </form>
       </div>
 
-      {/* Bloco 2 - Imagem */}
-      <div className="h-[797px]">
+      <div className="">
         <Image
           src="/Grupo4.png"
           alt="Imagem ilustrativa"
-          width={812}
-          height={797}
-          className="object-contain"
+          width={400}
+          height={200}
+          className="w-full h-auto object-contain"
         />
       </div>
     </section>
