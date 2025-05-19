@@ -1,20 +1,20 @@
-import './globals.css'
+import '@/app/styles/globals.css'
 import { Roboto } from 'next/font/google'
 
 const roboto = Roboto({
-  weight: ['400', '500', '700'],
   subsets: ['latin'],
+  weight: ['400', '500', '700'],
   variable: '--font-roboto',
 })
 
 export const metadata = {
   title: 'Central dos Convênios',
-  description: 'Planos de saúde ideais para você e sua família',
+  description: 'Landing Page',
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html>
+    <html lang="pt-BR" className={roboto.variable}>
       <head>
         <script
           dangerouslySetInnerHTML={{
@@ -38,15 +38,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             width="1"
             style={{ display: 'none' }}
             src="https://www.facebook.com/tr?id=8251171835007509&ev=PageView&noscript=1"
+            alt="fb-pixel"
           />
         </noscript>
       </head>
-      <body className={roboto.variable + ' font-sans'}>
-        <main>
-          {children}
-        </main>
+      <body className={`${roboto.variable} font-sans`}>
+        {children}
       </body>
     </html>
   )
 }
-

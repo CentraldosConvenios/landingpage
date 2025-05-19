@@ -1,0 +1,11 @@
+-- CreateTable
+CREATE TABLE "Lead" (
+    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "name" TEXT NOT NULL,
+    "phone" TEXT NOT NULL,
+    "numPeople" INTEGER NOT NULL,
+    "ages" TEXT NOT NULL,
+    "hasCNPJ" BOOLEAN NOT NULL,
+    "cep" TEXT NOT NULL,
+    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+);

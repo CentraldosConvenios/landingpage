@@ -1,21 +1,22 @@
 {
-  "name": "centraldosconvenios",
+  "name": "landing-captacao",
   "version": "0.1.0",
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
-    "build": "prisma generate && next build",
+    "build": "next build",
     "start": "next start",
     "lint": "next lint"
   },
   "dependencies": {
-    "prisma": "^6.7.0",
-    "@prisma/client": "^6.7.0",
+    "@next/font": "^14.2.15",
+    "@prisma/client": "^6.8.2",
     "next": "15.3.2",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "react-facebook-pixel": "^1.0.4",
     "react-fast-marquee": "^1.6.5",
-    "react-icons": "^5.5.0"
+    "react-input-mask-next": "^3.0.0-alpha.12"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
@@ -23,9 +24,10 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@types/react-input-mask": "^3.0.6",
     "eslint": "^9",
     "eslint-config-next": "15.3.2",
-    "prisma": "^6.7.0",
+    "prisma": "^6.8.2",
     "tailwindcss": "^4",
     "typescript": "^5"
   }

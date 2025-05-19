@@ -1,20 +1,22 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "sqlite"
   url      = env("DATABASE_URL")
 }
 
 model Lead {
-  id        String   @id @default(cuid())
-  nome      String
-  contato   String
-  vidas     Int
-  idades    String    // Pode ser uma string com as idades separadas por vírgula
-  possuiCNPJ Boolean
-  cep       String
-  criadoEm  DateTime  @default(now())
+  id          Int      @id @default(autoincrement())
+  name        String
+  phone       String   // Contato formatado como número de celular
+  numPeople   Int      // Quantas vidas entrarão no plano
+  ages        String   // Armazenaremos como string ex: "30,27,12"
+  hasCNPJ     Boolean  // Sim ou Não convertido para boolean
+  cep         String
+  createdAt   DateTime @default(now())
 }
-
